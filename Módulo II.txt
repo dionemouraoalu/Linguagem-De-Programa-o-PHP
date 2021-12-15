@@ -1,0 +1,33 @@
+______________________Questão 09______________________
+
+create table `cursos`(
+	cod int(10) auto_increment primary key,
+	nome varchar(45)
+);
+
+
+create table `disciplinas`(
+	cod int(10) auto_increment primary key,
+	nome varchar(45),
+	carga_horaria int(10),
+	cod_curso int(10),
+	foreign key (`cod_curso`) references `cursos`(`cod`)
+);
+
+
+
+______________________Questão 10______________________
+
+a)select * from cursos;
+
+
+b) select nome, carga_horaria from disciplinas order by nome asc;
+
+c) select c.nome, d.nome, d.carga_horaria from cursos as c join disciplinas as d order by c.nome, d.nome;
+
+d) select distinct (d.nome) from cursos as c join disciplinas as d  where c.nome = 'cursoA';
+
+e) select c.nome, d.nome, d.carga_horaria from cursos as c join disciplinas as d where d.carga_horaria > 40;
+
+f) select d.nome, c.nome from cursos as c join disciplinas as d where d.nome like '%Dados';
+
