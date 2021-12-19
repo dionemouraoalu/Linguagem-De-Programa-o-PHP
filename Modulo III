@@ -1,0 +1,1063 @@
+-----------------------------------------------------------------------------------------
+-----------------------------------------QUESTAO 6 --------------------------------------
+		<!DOCTYPE html>
+		<html lang="pt-br">
+		<head>
+			<meta charset="UTF-8">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Questao 6</title>
+
+		</head>
+		<body>
+
+			<h3>Digite os usuários a serem cadastrados.</h3>
+			<form action="index.php" method="GET">
+				
+				<input type="text" name='usuario' placeholder="Usuario">
+				<input type="text" name='acao' value="cadastrar" style="display: none;">
+				<input type="submit">
+			</form>
+
+		<?php
+			//verifica se deve cadastrar
+			if(isset($_GET['acao']) && $_GET['acao'] == 'cadastrar'){
+				$usuario =  isset( $_GET['usuario'] ) ?  $_GET['usuario'] : NULL;
+				//verifica se no está vazio
+				if($usuario != NULL && $usuario!= ''){
+					$a = fopen('usuarios.txt', 'a+');
+					fwrite($a, "$usuario". "\r\n");
+					fclose($a);
+				}
+				header("Location:index.php"); 
+			} 
+
+
+			//Busca o arquivo e exibe o conteúdo numa tabela html
+			$filename = 'usuarios.txt';
+
+			if (file_exists($filename)) {
+				$b = file('usuarios.txt');
+
+
+
+				$tabela = "<table class='styled-table'>";
+				$tabela .= '<thead>';
+				$tabela .= '<tr>';
+				$tabela .=  "<td>Usuarios</td>";
+				$tabela .= '</tr>';
+				$tabela .= '</thead>';
+				$tabela .= '<tbody>';
+				
+				foreach($b as $indice){
+					$tabela .= '<tr>';
+					$tabela .=  "<td>" . $indice. "</td>";
+					$tabela .= '</tr>';
+				}
+
+				$tabela .= '</tbody>';
+				$tabela .= '</table>';
+
+				echo $tabela;
+
+			} 
+			
+
+
+		?>
+
+
+			
+		</body>
+
+			<style>
+				*{
+					padding: 0;
+					margin: 0;
+					box-sizing: border-box;
+					font-size: 16px;
+					
+				}
+				html{
+					background-color: rgba(230, 230, 230, 0.5);
+					width: 100%;
+					height: 100%;
+					padding: 40px;
+				}
+
+				body{
+					width: 100%;
+					height: 100%;
+					background-color: white;
+		
+					box-shadow: 2px 2px 16px gray;
+					padding-top: 15px;
+				}
+
+				form, table{
+					width: 100%;
+					max-width: 500px;
+					/* background-color: red; */
+					margin: 0 auto;
+				}
+
+				form{
+					display: grid;
+					grid-template-columns: 1fr 3fr ;
+					grid-gap: 10px;
+				}
+
+				label{
+					text-align: right;
+					height: 30px;
+					line-height: 30px;
+				}
+
+				input{
+					height: 30px;
+					border: none;
+					border-bottom: 1px solid gray;
+				}
+				input[type='submit']:hover{
+					background-color: #009879; 
+					color: white;
+				}
+
+				input[type='submit']{
+					height: 30px;
+					border: none;
+
+				}
+
+				h3{
+		
+					font-size: 1.4rem;
+					text-align: center;
+					/* font-family: 'Nunito', sans-serif; */
+					font-family: Arial, 'Sans-serif';
+				}
+
+				.styled-table{
+					margin-top: 20px;
+					font-family: Arial, 'Sans-serif';
+				}
+
+
+				
+				.styled-table thead tr {
+					background-color: #009879;
+					color: #ffffff;
+					text-align: left;
+					width: 100%;
+					display: block;
+				}
+
+				.styled-table th,
+				.styled-table td {
+					padding: 12px 15px;
+				}
+				.styled-table tbody {
+					overflow-y: auto;
+					display: block;
+					height: 500px;
+				}
+
+				.styled-table tbody tr {
+					border-bottom: 1px solid #dddddd;
+				}
+
+				.styled-table tbody tr:nth-of-type(even) {
+					background-color: #f3f3f3;
+				}
+
+				.styled-table tbody tr:last-of-type {
+					border-bottom: 2px solid #009879;
+				}
+
+				.styled-table tbody tr.active-row {
+					font-weight: bold;
+					color: #009879;
+				}
+				.styled-table thead tr,
+				.styled-table tbody tr{
+					display: flex;
+					justify-content: space-between;
+				}
+
+
+
+			</style>
+
+		</html>
+
+		
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------
+-----------------------------------------QUESTAO 7 --------------------------------------
+
+<!DOCTYPE html>
+		<html lang="pt-br">
+		<head>
+			<meta charset="UTF-8">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Questao 7</title>
+		</head>
+		<body>
+
+			<h3>Cadastre de produtos</h3>
+			<form action="index.php" method="GET">
+				<label>Produto: </label>
+				<input type="text" name='produto'>
+				
+				<label>Quantidade: </label>
+				<input type="number" name='qtd'>
+
+				<label>Preco: </label>
+				<input type="number" name='preco'>
+
+				<label style="visibility: hidden;"></label>
+				<input type="text" name='acao' value="cadastrar" style="display: none;">
+
+				<input type="submit"  value="Cadastrar"> 
+			</form>
+
+		<?php
+			//verifica  a acao
+			if(isset($_GET['acao']) && $_GET['acao'] == 'cadastrar'){
+				$ar[] =  isset( $_GET['produto'] ) ?  $_GET['produto'] : NULL;
+				$ar[] =  isset( $_GET['qtd'] )     ?  $_GET['qtd']     : NULL;
+				$ar[] =  isset( $_GET['preco'] )   ?  $_GET['preco']   : NULL;
+				
+				$str = implode(" - ", $ar);
+
+				//verifica se não está nulo e cadastra no arquivo
+				if(  !in_array(NULL, $ar)  ){
+					$a = fopen('produtos.txt', 'a+');
+					fwrite($a, $str . "\r\n");
+					fclose($a);
+				}
+				header("Location:index.php"); 
+			} 
+
+
+			//busca o arquivo e exibe numa tabela
+			$filename = 'produtos.txt';
+
+			if (file_exists($filename)) {
+				$b = file('produtos.txt');
+
+				$tabela = "<table class='styled-table'>";
+				$tabela .= '<thead>';
+				$tabela .= '<tr>';
+				$tabela .=  "<td>Produto</td>";
+				$tabela .=  "<td>Quantidade</td>";
+				$tabela .=  "<td>preço</td>";
+				$tabela .= '</tr>';
+				$tabela .= '</thead>';
+				$tabela .= '<tbody>';
+				
+				foreach($b as $indice){
+					$aux = explode(" - ", $indice);
+					$tabela .= '<tr>';
+					$tabela .=  "<td>" . $aux[0]. "</td>";
+					$tabela .=  "<td>" . $aux[1]. "</td>";
+					$tabela .=  "<td>" . $aux[2]. "</td>";
+					$tabela .= '</tr>';
+				}
+
+				$tabela .= '</tbody>';
+				$tabela .= '</table>';
+
+				echo $tabela;
+
+			} 
+			
+
+
+		?>
+		
+
+
+			
+		</body>
+
+			<style>
+				*{
+					padding: 0;
+					margin: 0;
+					box-sizing: border-box;
+					font-size: 16px;
+					
+				}
+				html{
+					background-color: rgba(230, 230, 230, 0.5);
+					width: 100%;
+					height: 100%;
+					padding: 40px;
+				}
+
+				body{
+					width: 100%;
+					height: 100%;
+					background-color: white;
+		
+					box-shadow: 2px 2px 16px gray;
+					padding-top: 15px;
+				}
+
+				form, table{
+					width: 100%;
+					max-width: 500px;
+					/* background-color: red; */
+					margin: 0 auto;
+				}
+
+				form{
+					display: grid;
+					grid-template-columns: 1fr 3fr ;
+					grid-gap: 10px;
+				}
+
+				label{
+					text-align: right;
+					height: 30px;
+					line-height: 30px;
+				}
+
+				input{
+					height: 30px;
+					border: none;
+					border-bottom: 1px solid gray;
+				}
+				input[type='submit']:hover{
+					background-color: #009879; 
+					color: white;
+				}
+
+				input[type='submit']{
+					height: 30px;
+					border: none;
+
+				}
+
+				h3{
+		
+					font-size: 1.4rem;
+					text-align: center;
+					/* font-family: 'Nunito', sans-serif; */
+					font-family: Arial, 'Sans-serif';
+				}
+
+				.styled-table{
+					margin-top: 20px;
+					font-family: Arial, 'Sans-serif';
+				}
+
+
+				
+				.styled-table thead tr {
+					background-color: #009879;
+					color: #ffffff;
+					text-align: left;
+					width: 100%;
+					display: block;
+				}
+
+				.styled-table th,
+				.styled-table td {
+					padding: 12px 15px;
+				}
+				.styled-table tbody {
+					overflow-y: auto;
+					display: block;
+					height: 350px;
+				}
+
+				.styled-table tbody tr {
+					border-bottom: 1px solid #dddddd;
+				}
+
+				.styled-table tbody tr:nth-of-type(even) {
+					background-color: #f3f3f3;
+				}
+
+				.styled-table tbody tr:last-of-type {
+					border-bottom: 2px solid #009879;
+				}
+
+				.styled-table tbody tr.active-row {
+					font-weight: bold;
+					color: #009879;
+				}
+				.styled-table thead tr,
+				.styled-table tbody tr{
+					display: flex;
+					justify-content: space-between;
+				}
+
+
+
+			</style>
+
+		</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------
+-----------------------------------------QUESTAO 8 --------------------------------------
+
+
+		<!DOCTYPE html>
+		<html lang="pt-br">
+		<head>
+			<meta charset="UTF-8">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Questao 8</title>
+		</head>
+		<body>
+
+			<h3>Convertendo arquivo TXT em CSV e Exibindo Resultado Abaixo </h3>
+			
+		<?php
+
+			//Cria o arquivo
+			$contatoTXT = fopen('contato.txt', 'a+');
+
+			//Array de contatos
+			$contatos = [
+				[
+					'nome' => 'Ana',
+					'email' => 'ana@sobral.com.br',
+					'telefone' => '88 99999-0001'
+				],
+
+				[
+					'nome' => 'Eva',
+					'email' => 'eva@sobral.com.br',
+					'telefone' => '88 99999-0002'
+				],
+
+				[
+					'nome' => 'zoe',
+					'email' => 'zoe@sobral.com.br',
+					'telefone' => '88 99999-0003'
+				],
+
+			];
+
+			//Escreve os contato no arquivo txt
+			foreach($contatos as $indice => $valor){
+				$str = implode(" - ", $valor );
+				fwrite($contatoTXT, $str. "\r\n"  );
+			
+			}
+
+			fclose($contatoTXT);
+
+
+			if(isset($_GET['acao']) && $_GET['acao'] == 'cadastrar'){
+				$ar[] =  isset( $_GET['produto'] ) ?  $_GET['produto'] : NULL;
+				$ar[] =  isset( $_GET['qtd'] )     ?  $_GET['qtd']     : NULL;
+				$ar[] =  isset( $_GET['preco'] )   ?  $_GET['preco']   : NULL;
+				
+				$str = implode(" - ", $ar);
+
+				if(  !in_array(NULL, $ar)  ){
+					$a = fopen('produtos.txt', 'a+');
+					fwrite($a, $str . "\r\n");
+					fclose($a);
+				}
+				header("Location:index.php"); 
+			} 
+
+			//Faz a leitura e converte para csv
+
+			$filename = 'contato.txt';
+
+			if (file_exists($filename)) {
+				$b = file('contato.txt');
+				$contatoCSV = fopen('contato.csv', 'a+');
+
+				foreach($b as $indice){
+					$aux = str_replace(' - ', ';', $indice );
+					fwrite($contatoCSV, $aux );
+				}
+				fclose($contatoCSV);
+			}
+
+
+			//le o arquivo convertido em csv e exibe numa tabela html
+			$filename = 'contato.csv';
+
+			if (file_exists($filename)) {
+				$b = file('contato.csv');
+
+				$tabela = "<table class='styled-table'>";
+				$tabela .= '<thead>';
+				$tabela .= '<tr>';
+				$tabela .=  "<td>Nome</td>";
+				$tabela .=  "<td>E-mail</td>";
+				$tabela .=  "<td>Telefone</td>";
+				$tabela .= '</tr>';
+				$tabela .= '</thead>';
+				$tabela .= '<tbody>';
+				
+				foreach($b as $indice){
+					$aux = explode(";", $indice);
+					$tabela .= '<tr>';
+					$tabela .=  "<td>" . $aux[0]. "</td>";
+					$tabela .=  "<td>" . $aux[1]. "</td>";
+					$tabela .=  "<td>" . $aux[2]. "</td>";
+					$tabela .= '</tr>';
+				}
+
+				$tabela .= '</tbody>';
+				$tabela .= '</table>';
+
+				echo $tabela;
+
+			} 
+			
+
+
+		?>
+
+
+			
+		</body>
+
+			<style>
+				*{
+					padding: 0;
+					margin: 0;
+					box-sizing: border-box;
+					font-size: 16px;
+					
+				}
+				html{
+					background-color: rgba(230, 230, 230, 0.5);
+					width: 100%;
+					height: 100%;
+					padding: 40px;
+				}
+
+				body{
+					width: 100%;
+					height: 100%;
+					background-color: white;
+		
+					box-shadow: 2px 2px 16px gray;
+					padding-top: 15px;
+				}
+
+				form, table{
+					width: 100%;
+					max-width: 500px;
+					/* background-color: red; */
+					margin: 0 auto;
+				}
+
+				form{
+					display: grid;
+					grid-template-columns: 1fr 3fr ;
+					grid-gap: 10px;
+				}
+
+				label{
+					text-align: right;
+					height: 30px;
+					line-height: 30px;
+				}
+
+				input{
+					height: 30px;
+					border: none;
+					border-bottom: 1px solid gray;
+				}
+				input[type='submit']:hover{
+					background-color: #009879; 
+					color: white;
+				}
+
+				input[type='submit']{
+					height: 30px;
+					border: none;
+
+				}
+
+				h3{
+		
+					font-size: 1.4rem;
+					text-align: center;
+					/* font-family: 'Nunito', sans-serif; */
+					font-family: Arial, 'Sans-serif';
+				}
+
+				.styled-table{
+					margin-top: 20px;
+					font-family: Arial, 'Sans-serif';
+				}
+
+
+				
+				.styled-table thead tr {
+					background-color: #009879;
+					color: #ffffff;
+					text-align: left;
+					width: 100%;
+					display: block;
+				}
+
+				.styled-table th,
+				.styled-table td {
+					padding: 12px 15px;
+				}
+				.styled-table tbody {
+					overflow-y: auto;
+					display: block;
+					height: 500px;
+				}
+
+				.styled-table tbody tr {
+					border-bottom: 1px solid #dddddd;
+				}
+
+				.styled-table tbody tr:nth-of-type(even) {
+					background-color: #f3f3f3;
+				}
+
+				.styled-table tbody tr:last-of-type {
+					border-bottom: 2px solid #009879;
+				}
+
+				.styled-table tbody tr.active-row {
+					font-weight: bold;
+					color: #009879;
+				}
+				.styled-table thead tr,
+				.styled-table tbody tr{
+					display: flex;
+					justify-content: space-between;
+				}
+
+
+
+			</style>
+
+		</html>
+
+
+-----------------------------------------------------------------------------------------
+-----------------------------------------QUESTAO 9 --------------------------------------
+
+
+<!DOCTYPE html>
+		<html lang="pt-br">
+		<head>
+			<meta charset="UTF-8">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Questao 9</title>
+		</head>
+		<body>
+
+			<h3>Cadastre os usuarios</h3>
+			<form action="index.php" method="POST">
+				<label>Nome: </label>
+				<input type="text" name='usuario' required>
+				
+				<label>Senha: </label>
+				<input type="password" name='senha' required>
+
+
+				<label style="visibility: hidden;"></label>
+				<input type="text" name='acao' value="cadastrar" style="display: none;">
+
+				<input type="submit"  value="Cadastrar"> 
+			</form>
+			<br><br>
+
+			<h3>Logar com usuario criado</h3>
+			<form action="index.php" method="POST">
+				<label>Nome: </label>
+				<input type="text" name='usuario'>
+				
+				<label>Senha: </label>
+				<input type="password" name='senha'>
+
+
+				<label style="visibility: hidden;"></label>
+				<input type="text" name='acao' value="logar" style="display: none;">
+
+				<input type="submit"  value="Logar"> 
+			</form>
+
+		<?php
+			//verifica  a acao
+			if(isset($_POST['acao']) && $_POST['acao'] == 'cadastrar'){
+				$ar[] =  isset( $_POST['usuario'] ) ?  $_POST['usuario'] : NULL;
+				$ar[] =  isset( $_POST['senha'] )   ?  $_POST['senha']   : NULL;
+			
+				//print_r($ar);
+				
+				$str = implode(" - ", $ar);
+
+				//verifica se não está nulo e cadastra no arquivo
+				if(  !in_array(NULL, $ar)  ){
+					$a = fopen('usuariosN.txt', 'a+');
+					fwrite($a, $str . "\r\n");
+					fclose($a);
+				}
+			
+				header("Location:index.php"); 
+			} 
+
+			//verifica  a acao
+			if(isset($_POST['acao']) && $_POST['acao'] == 'logar'){
+				$ar[] =  isset( $_POST['usuario'] ) ?  $_POST['usuario'] : NULL;
+				$ar[] =  isset( $_POST['senha'] )     ?  $_POST['senha']     : NULL;
+			
+				
+				//busca o usuario no arquivo
+				$filename = 'usuariosN.txt';
+
+				if (file_exists($filename)) {
+					$b = file('usuariosN.txt');
+
+					foreach($b as $value){
+						$aux = explode(' - ', $value);
+
+						if($ar[0] == $aux[0] && $ar[1] == $aux[1]  ){
+							header("Location:index.php?acao=ok"); 
+						}else{
+							header("Location:index.php?acao=err");
+						}
+
+					}
+				}
+
+			} 
+
+
+			if(isset($_GET['acao']) && $_GET['acao'] =='ok')
+				echo "<p>Logado com sucesso!</p>";
+			if(isset($_GET['acao']) && $_GET['acao'] =='err')
+				echo "<script>alert('Erro de autenticação!');</script>";
+
+		?>
+		
+
+
+			
+		</body>
+
+			<style>
+				*{
+					padding: 0;
+					margin: 0;
+					box-sizing: border-box;
+					font-size: 16px;
+					
+				}
+				html{
+					background-color: rgba(230, 230, 230, 0.5);
+					width: 100%;
+					height: 100%;
+					padding: 40px;
+				}
+
+				body{
+					width: 100%;
+					height: 100%;
+					background-color: white;
+		
+					box-shadow: 2px 2px 16px gray;
+					padding-top: 15px;
+				}
+
+				form, table{
+					width: 100%;
+					max-width: 500px;
+					/* background-color: red; */
+					margin: 0 auto;
+				}
+
+				form{
+					display: grid;
+					grid-template-columns: 1fr 3fr ;
+					grid-gap: 10px;
+				}
+
+				label{
+					text-align: right;
+					height: 30px;
+					line-height: 30px;
+				}
+
+				input{
+					height: 30px;
+					border: none;
+					border-bottom: 1px solid gray;
+				}
+				input[type='submit']:hover{
+					background-color: #009879; 
+					color: white;
+				}
+
+				input[type='submit']{
+					height: 30px;
+					border: none;
+
+				}
+
+				h3{
+		
+					font-size: 1.4rem;
+					text-align: center;
+					/* font-family: 'Nunito', sans-serif; */
+					font-family: Arial, 'Sans-serif';
+				}
+
+				p{
+					display: block;
+					text-align: center;
+					margin-top: 50px;
+					font-size: 2rem;
+					color: red;
+					
+				}
+
+
+
+			</style>
+
+		</html>
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------
+-----------------------------------------QUESTAO 10 --------------------------------------
+
+
+
+<!DOCTYPE html>
+		<html lang="pt-br">
+		<head>
+			<meta charset="UTF-8">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Questao 10</title>
+		</head>
+		<body>
+
+			<h3>Cdastre de produtos</h3>
+			<form action="index.php" method="GET">
+				<label>Produto: </label>
+				<input type="text" name='item'>
+				
+				<label>Quantidade: </label>
+				<input type="number" name='qtd'>
+
+				<label style="visibility: hidden;"></label>
+				<input type="text" name='acao' value="cadastrar" style="display: none;">
+
+				<input type="submit"  value="Cadastrar"> 
+			</form>
+
+		<?php
+			//verifica  a acao
+			if(isset($_GET['acao']) && $_GET['acao'] == 'cadastrar'){
+				$ar[] =  isset( $_GET['item'] ) ?  $_GET['item'] : NULL;
+				$ar[] =  isset( $_GET['qtd'] )     ?  $_GET['qtd']     : NULL;
+				
+				$str = implode(" - ", $ar);
+
+				//verifica se não está nulo e cadastra no arquivo
+				if(  !in_array(NULL, $ar)  ){
+					$a = fopen('itens.txt', 'a+');
+					fwrite($a, $str . "\r\n");
+					fclose($a);
+				}
+				header("Location:index.php"); 
+			} 
+
+
+			//busca o arquivo e exibe numa tabela
+			$filename = 'itens.txt';
+
+			if (file_exists($filename)) {
+				$b = file('itens.txt');
+
+				$tabela = "<table class='styled-table'>";
+				$tabela .= '<thead>';
+				$tabela .= '<tr>';
+				$tabela .=  "<td>Item</td>";
+				$tabela .=  "<td>Quantidade</td>";
+				$tabela .= '</tr>';
+				$tabela .= '</thead>';
+				$tabela .= '<tbody>';
+				
+				foreach($b as $indice){
+					$aux = explode(" - ", $indice);
+					$tabela .= '<tr>';
+					$tabela .=  "<td>" . $aux[0]. "</td>";
+					$tabela .=  "<td>" . $aux[1]. "</td>";
+					$tabela .= '</tr>';
+				}
+
+				$tabela .= '</tbody>';
+				$tabela .= '</table>';
+
+				echo $tabela;
+
+			} 
+			
+
+
+		?>
+		
+
+
+			
+		</body>
+
+			<style>
+				*{
+					padding: 0;
+					margin: 0;
+					box-sizing: border-box;
+					font-size: 16px;
+					
+				}
+				html{
+					background-color: rgba(230, 230, 230, 0.5);
+					width: 100%;
+					height: 100%;
+					padding: 40px;
+				}
+
+				body{
+					width: 100%;
+					height: 100%;
+					background-color: white;
+		
+					box-shadow: 2px 2px 16px gray;
+					padding-top: 15px;
+				}
+
+				form, table{
+					width: 100%;
+					max-width: 500px;
+					/* background-color: red; */
+					margin: 0 auto;
+				}
+
+				form{
+					display: grid;
+					grid-template-columns: 1fr 3fr ;
+					grid-gap: 10px;
+				}
+
+				label{
+					text-align: right;
+					height: 30px;
+					line-height: 30px;
+				}
+
+				input{
+					height: 30px;
+					border: none;
+					border-bottom: 1px solid gray;
+				}
+				input[type='submit']:hover{
+					background-color: #009879; 
+					color: white;
+				}
+
+				input[type='submit']{
+					height: 30px;
+					border: none;
+
+				}
+
+				h3{
+		
+					font-size: 1.4rem;
+					text-align: center;
+					/* font-family: 'Nunito', sans-serif; */
+					font-family: Arial, 'Sans-serif';
+				}
+
+				.styled-table{
+					margin-top: 20px;
+					font-family: Arial, 'Sans-serif';
+				}
+
+
+				
+				.styled-table thead tr {
+					background-color: #009879;
+					color: #ffffff;
+					text-align: left;
+					width: 100%;
+					display: block;
+				}
+
+				.styled-table th,
+				.styled-table td {
+					padding: 12px 15px;
+				}
+				.styled-table tbody {
+					overflow-y: auto;
+					display: block;
+					height: 350px;
+				}
+
+				.styled-table tbody tr {
+					border-bottom: 1px solid #dddddd;
+				}
+
+				.styled-table tbody tr:nth-of-type(even) {
+					background-color: #f3f3f3;
+				}
+
+				.styled-table tbody tr:last-of-type {
+					border-bottom: 2px solid #009879;
+				}
+
+				.styled-table tbody tr.active-row {
+					font-weight: bold;
+					color: #009879;
+				}
+				.styled-table thead tr,
+				.styled-table tbody tr{
+					display: flex;
+					justify-content: space-between;
+				}
+
+
+
+			</style>
+
+		</html>
