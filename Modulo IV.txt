@@ -1,0 +1,481 @@
+--------------------------------------------------------------
+-----------------------  QUESTÃO 6  --------------------------
+<?php
+	try {
+		$username = "root";
+		$password = "";
+		$conn = new PDO('mysql:host=localhost;dbname=cursoPHP;charset=utf8', $username, $password);
+		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+		$stmt = $conn->prepare('SELECT * FROM `cursos`');
+        $stmt->execute();
+        $content = $stmt->fetchAll(PDO::FETCH_OBJ);
+        
+		//retorna o array codificado em json contendo todos os cursos cadastrados no banco
+        echo json_encode($content, true);
+
+
+	} catch(PDOException $e) {
+		echo 'ERROR: ' . $e->getMessage();
+	}
+?>
+
+
+
+
+--------------------------------------------------------------
+-----------------------  QUESTÃO 8  --------------------------
+
+
+<?php
+	
+
+	if( isset($_GET['acao']) && $_GET['acao']=="all"){
+	
+		try {
+			$username = "root";
+			$password = "";
+			$conn = new PDO('mysql:host=localhost;dbname=cursoPHP;charset=utf8', $username, $password);
+			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
+			$stmt = $conn->prepare('SELECT * FROM `cursos`');
+		    $stmt->execute();
+		    $content = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    
+		    $return = json_encode($content, true);
+		    
+			
+			} catch(PDOException $e) {
+				echo 'ERROR: ' . $e->getMessage();
+			}
+	}else{
+		$ar = [array(
+			"cod"=> "Indefined",
+			"nome"=> "Nenhum curso encontrado!"
+			)
+		];
+		
+		
+		$return = json_encode($ar, true);
+	
+	}
+		
+?>
+
+<DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<title>Módulo IV</title>
+</head>
+
+<body>
+	<h3>Clique no botão para exibir os cursos cadastrados no banco de dados!</h3>
+	<form method="GET" action="index.php?acao=all">
+		<input type="text" name="acao" value="all" style="display: none;"/>
+		<input type="submit" value="Exibir"/>
+	
+	</form>
+	
+	<table class="styled-table">
+		<thead>
+			<tr>
+				<td>Código</td>
+				<td>Curso</td>
+			</tr>
+		</thead>
+		<tbody>
+			
+		
+		</tbody>
+	
+	</table>
+	
+	
+	<!-- convertendo json para objeto javascript-->
+	<script>
+		var txt = '<?php print($return); ?> '; // insere o retorno do banco de dados na variável 
+		var table =  JSON.parse(txt); //converte para objeto
+		
+		// localiza a tebela
+		var tbody = document.querySelector('tbody');
+		
+		//insere a linha com o código e o nome do curso na tabela
+		table.forEach( (el)=>{
+			var tr = document.createElement("tr");
+			tr.innerHTML = [ '<td>' + el.cod + '</td>' + '<td>' + el.nome + '</td>'].join("\n") ;
+			tbody.appendChild(tr);
+		});
+		
+	</script>
+	
+	
+	<!-- Estilo da página-->
+	<style>
+				*{
+					padding: 0;
+					margin: 0;
+					box-sizing: border-box;
+					font-size: 16px;
+					
+				}
+				html{
+					background-color: rgba(230, 230, 230, 0.5);
+					width: 100%;
+					height: 100%;
+					padding: 40px;
+				}
+
+				body{
+					width: 100%;
+					height: 100%;
+					background-color: white;
+		
+					box-shadow: 2px 2px 16px gray;
+					padding-top: 15px;
+				}
+
+				form, table{
+					width: 100%;
+					max-width: 500px;
+					/* background-color: red; */
+					margin: 0 auto;
+				}
+
+				form{
+					display: grid;
+					grid-template-columns: 1fr 3fr ;
+					grid-gap: 10px;
+				}
+
+				label{
+					text-align: right;
+					height: 30px;
+					line-height: 30px;
+				}
+
+				input{
+					height: 30px;
+					border: none;
+					border-bottom: 1px solid gray;
+				}
+				input[type='submit']:hover{
+					background-color: #009879; 
+					color: white;
+				}
+
+				input[type='submit']{
+					height: 30px;
+					border: none;
+
+				}
+
+				h3{
+		
+					font-size: 1.4rem;
+					text-align: center;
+					/* font-family: 'Nunito', sans-serif; */
+					font-family: Arial, 'Sans-serif';
+				}
+
+				.styled-table{
+					margin-top: 20px;
+					font-family: Arial, 'Sans-serif';
+				}
+
+
+				
+				.styled-table thead tr {
+					background-color: #009879;
+					color: #ffffff;
+					text-align: left;
+					width: 100%;
+					display: block;
+				}
+
+				.styled-table th,
+				.styled-table td {
+					padding: 12px 15px;
+				}
+				.styled-table tbody {
+					overflow-y: auto;
+					display: block;
+					height: 500px;
+				}
+
+				.styled-table tbody tr {
+					border-bottom: 1px solid #dddddd;
+					text-align:center;
+				}
+
+				.styled-table tbody tr:nth-of-type(even) {
+					background-color: #f3f3f3;
+				}
+
+				.styled-table tbody tr:last-of-type {
+					border-bottom: 2px solid #009879;
+				}
+
+				.styled-table tbody tr.active-row {
+					font-weight: bold;
+					color: #009879;
+				}
+				.styled-table thead tr,
+				.styled-table tbody tr{
+					display: flex;
+					justify-content: space-around;
+				}
+
+
+
+			</style>
+</body>
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------------
+-----------------------  QUESTÃO 9  --------------------------
+
+<?php
+	
+	// classe que conecta com o banco de dados, é o controller da página
+	class Conn{
+			private $username = "root";
+			private $password = "";
+	
+			public function conect(){
+				try{
+				    
+				    $conn = new PDO('mysql:host=localhost;dbname=cursoPHP;charset=utf8', $this->username, $this->password);
+					$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+				    return $conn;
+
+				}catch(PDOException $e){
+				    echo '<p>'.$e.getMessage().'</p>';
+				}
+			}
+	}
+	
+
+	// controler da página
+	if( isset($_GET['acao']) && $_GET['acao']=="add"){
+		if( isset($_GET['curso']) && $_GET['curso'] !=""  && $_GET['curso'] != null){
+		 	$conection = new Conn();
+		 	$newConection = $conection->conect();
+		 	
+		 	$curso = $_GET['curso'];
+		 	$query = "INSERT INTO `cursos`(`cod`, `nome`) VALUES (default,'".$curso."') ";
+		    
+		    $stmt = $newConection->prepare($query);
+		    $stmt->execute();
+		    $content = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    
+		 	header("Location: index.php");
+		}
+		 
+	}else{
+			$conection = new Conn();
+		 	$newConection = $conection->conect();
+		 	
+		    $stmt = $newConection->prepare('SELECT * FROM `cursos`');
+		    $stmt->execute();
+		    $content = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    
+		    $return = json_encode($content, true);
+	
+	}
+		
+?>
+
+<DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<title>Módulo IV</title>
+</head>
+
+<body>
+	<h3>Cadatre um curso abaixo</h3><br><br>
+
+	<form method="GET" action="index.php?">
+		<input type="text" name="acao" value="add" style="display: none;"/>
+		<input type="text" name="curso"/>
+		<input type="submit" value="Cadastrar"/>
+	
+	</form>
+	
+	<table class="styled-table">
+		<thead>
+			<tr>
+				<td>Código</td>
+				<td>Curso</td>
+			</tr>
+		</thead>
+		<tbody>
+			
+		
+		</tbody>
+	
+	</table>
+	
+	
+	<!-- convertendo json para objeto javascript-->
+	<script>
+		var txt = '<?php print($return); ?> '; // insere o retorno do banco de dados na variável 
+		var table =  JSON.parse(txt); //converte para objeto
+		//console.log(table);
+		
+		// localiza a tebela
+		var tbody = document.querySelector('tbody');
+		
+		//insere a linha com o código e o nome do curso na tabela
+		for(var i = 0; i < table.length; i++){
+			var tr = document.createElement("tr");
+			tr.innerHTML = [ '<td>' + table[i].cod + '</td>' + '<td>' + table[i].nome + '</td>'].join("\n") ;
+			tbody.appendChild(tr);
+		}
+		
+		
+
+		
+	</script>
+	
+	
+	<!-- Estilo da página-->
+	<style>
+				*{
+					padding: 0;
+					margin: 0;
+					box-sizing: border-box;
+					font-size: 16px;
+					
+				}
+				html{
+					background-color: rgba(230, 230, 230, 0.5);
+					width: 100%;
+					height: 100%;
+					padding: 40px;
+				}
+
+				body{
+					width: 100%;
+					height: 100%;
+					background-color: white;
+		
+					box-shadow: 2px 2px 16px gray;
+					padding-top: 15px;
+				}
+
+				form, table{
+					width: 100%;
+					max-width: 500px;
+					/* background-color: red; */
+					margin: 0 auto;
+				}
+
+				form{
+					display: grid;
+					grid-template-columns: 1fr 3fr ;
+					grid-gap: 10px;
+				}
+
+				label{
+					text-align: right;
+					height: 30px;
+					line-height: 30px;
+				}
+
+				input{
+					height: 30px;
+					border: none;
+					border-bottom: 1px solid gray;
+				}
+				input[type='submit']:hover{
+					background-color: #009879; 
+					color: white;
+				}
+
+				input[type='submit']{
+					height: 30px;
+					border: none;
+
+				}
+
+				h3{
+		
+					font-size: 1.4rem;
+					text-align: center;
+					/* font-family: 'Nunito', sans-serif; */
+					font-family: Arial, 'Sans-serif';
+				}
+
+				.styled-table{
+					margin-top: 20px;
+					font-family: Arial, 'Sans-serif';
+				}
+
+
+				
+				.styled-table thead tr {
+					background-color: #009879;
+					color: #ffffff;
+					text-align: left;
+					width: 100%;
+					display: block;
+				}
+
+				.styled-table th,
+				.styled-table td {
+					padding: 12px 15px;
+				}
+				.styled-table tbody {
+					overflow-y: auto;
+					display: block;
+					height: 500px;
+				}
+
+				.styled-table tbody tr {
+					border-bottom: 1px solid #dddddd;
+					text-align:center;
+				}
+
+				.styled-table tbody tr:nth-of-type(even) {
+					background-color: #f3f3f3;
+				}
+
+				.styled-table tbody tr:last-of-type {
+					border-bottom: 2px solid #009879;
+				}
+
+				.styled-table tbody tr.active-row {
+					font-weight: bold;
+					color: #009879;
+				}
+				.styled-table thead tr,
+				.styled-table tbody tr{
+					display: flex;
+					justify-content: space-around;
+				}
+
+
+
+			</style>
+</body>
+
+
+</html>
+
+
+
+
+
