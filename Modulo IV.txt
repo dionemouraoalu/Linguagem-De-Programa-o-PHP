@@ -30,7 +30,7 @@
 <?php
 	
 
-	if( isset($_GET['acao']) && $_GET['acao']=="all"){
+	if( isset($_GET['acao']) && $_GET['acao']=="all"){ 
 	
 		try {
 			$username = "root";
