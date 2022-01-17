@@ -2,7 +2,7 @@
 <DOCTYPE html>
 <html lang="pt-br">
 <head>
-	<title>Produtos</title>
+	<title>Fornecedores</title>
 </head>
 <body>
 	<label>PHP Curso</label>
@@ -17,8 +17,8 @@
 	</div>	
 
 	<form method="post" action="controllers/Manager.class.php?acao=cadastrar">
-		<input type="hidden" name="local" value="PPxZsw"/> 
-		<input type="text" name="produto" />
+		<input type="hidden" name="local" value="Yuk74T"/> 
+		<input type="text" name="nome" />
 		<input type="submit" value="Cadastrar">
 	</form>
 

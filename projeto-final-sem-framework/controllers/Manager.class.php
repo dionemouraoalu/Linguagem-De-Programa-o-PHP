@@ -38,13 +38,19 @@
 			if($tabela == $key)
 				$manager->create($value, $ar);
 		}
-
 		
-
-		// echo "<pre>";
-		// print_r($_POST);
-		// echo "</pre>";
 	}else if($acao == 'ler'){
+		require_once('../models/Conection.model.php');
+		require_once('../models/Manager.model.php');
+
+		$connect = new Connect;
+		$manager =  new Manager($connect);
+		$result = $manager->read();
+		
+		echo "<pre>";
+		print_r($result);
+		echo "</pre>";
+
 
 	}else if($acao == 'atualizar'){
 

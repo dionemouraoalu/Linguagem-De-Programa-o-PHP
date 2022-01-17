@@ -8,63 +8,52 @@ class Manager{
 		}
 
 		function create($table, $values){
-			//filtros
-			echo($table);
+			// echo($table);
 
 
-			echo "<pre>";
-			print_r($values);
-			echo "</pre>";
+			// echo "<pre>";
+			// print_r($values);
+			// echo "</pre>";
+			$query = "INSERT INTO $table VALUES ( ";
 
-			// foreach ($filters as $key => $value) {
-			// 	$values .= "$key=:$key AND ";
-			// }
-
-			// //removendo ultimo "AND";
-			// $filters_delete = substr($filters_delete, 0, -4);
+				//'[value-1]','[value-2]') ";
 
 
-			// # preparando query apartir dos campos($fields) e os parametros de valores nomeados($values)
-			// $query = "INSERT INTO $table VALUES ('[value-1]','[value-2]') ";
+
+			foreach ($values as $key => $value) {
+				if( $value == 'default'){
+					$query .= " $value " . " , ";
+				}else{
+					$query .= " '$value' " . " , ";
+				}
+			}
+			$query = substr($query, 0, -2);
+			$query .= 	")";
 
 
-			// # se a consulta precisar de algo mais..
-			// if($query_extra !=
-			// ""){
-			// $query .= $query_extra;
-			// }
+			echo($query);
 
 
-			// # apenas para testar a query (descomente o echo) - PADRÃO - COMENTADO
-			// //echo $query;
-			// //continuação da preparação da query...
-			// $statement = $pdo->prepare($query);
-			// if (!$statement) {
-			// echo "\PDO::errorInfo():\n";
-			// print_r($dbh->errorInfo());
-			// }
-
-
-			// //substituindo os parametros dos filtros nomeados pelos verdadeiros valores, ex: ":name" por "Anthony"
-			// foreach ($filters as $key => $value){
-			// 	//$parameters[":$key"] = $value;
-			// 	$statement->bindValue(":$key"
-			// 	, $value, PDO::PARAM_STR);
-			// }
-
-
-			// //executando a query já com seus valores
-			// if($statement->execute()){
-			// 	//se der certo retorna true...
-			// 	return true;
-			// }else{
-			// 	//se não der certo, retornará false...
-			// 	return false;
-			// }
+			try{
+	            $sql = $this->conection->prepare($query);
+	            $sql->execute();
+	        }catch(PDOException $e){
+	            echo '<p>'.$e.'</p>';
+	        }
 
 		}//end create
 
-		function read(){
+		function read($table){
+			$query = "SELECT * FROM  $table";
+
+			try{
+	            $sql = $this->conection->prepare($query);
+	            $sql->execute();
+	            return $sql->fetchAll(PDO::FETCH_ASSOC);
+
+	        }catch(PDOException $e){
+	            echo '<p>'.$e.'</p>';
+	        }
 			
 		}
 		function update(){

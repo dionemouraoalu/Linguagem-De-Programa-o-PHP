@@ -104,7 +104,7 @@
 			var tr = document.createElement("tr");
 			tr.innerHTML = [ '<td>' + el.cod + '</td>' + '<td>' + el.nome + '</td>'].join("\n") ;
 			tbody.appendChild(tr);
-		});
+		}); 
 		
 	</script>
 	
