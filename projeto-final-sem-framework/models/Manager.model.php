@@ -8,12 +8,6 @@ class Manager{
 		}
 
 		function create($table, $values){
-			// echo($table);
-
-
-			// echo "<pre>";
-			// print_r($values);
-			// echo "</pre>";
 			$query = "INSERT INTO $table VALUES ( ";
 
 				//'[value-1]','[value-2]') ";
@@ -73,11 +67,47 @@ class Manager{
 			
 			
 		}
-		function update($table, $values){
-			
+
+
+		function update($table, $array=null){
+			$query = "UPDATE $table ";
+
+			if($query != null){
+				foreach($array as $key => $value){
+					$query_aux = "SET $key = $value";
+				}
+				$query_aux = $query = substr($query_aux, 0, -2);
+				$query .= $query_aux;
+
+				try{
+		            $sql = $this->conection->prepare($query);
+		            $sql->execute();
+		            return $sql->fetchAll(PDO::FETCH_ASSOC);
+
+		        }catch(PDOException $e){
+		            echo '<p>'.$e.'</p>';
+		        }
+			}
 		}
-		function delete($table, $id){
-			
+
+
+
+
+		function delete($table, $query_extra=null){
+			$query = "DELETE FROM $table";
+
+			if($query != null){
+				$query .= $query_extra;
+
+				try{
+		            $sql = $this->conection->prepare($query);
+		            $sql->execute();
+		            return $sql->fetchAll(PDO::FETCH_ASSOC);
+
+		        }catch(PDOException $e){
+		            echo '<p>'.$e.'</p>';
+		        }
+			}
 		}
 
 		

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 16-Jan-2022 às 19:47
+-- Tempo de geração: 18-Jan-2022 às 00:29
 -- Versão do servidor: 10.4.22-MariaDB
 -- versão do PHP: 8.1.1
 
@@ -44,6 +44,8 @@ CREATE TABLE `Cidade` (
   `uf` char(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+
 -- --------------------------------------------------------
 
 --
@@ -80,6 +82,8 @@ CREATE TABLE `Fornecedor` (
   `insc` varchar(255) NOT NULL,
   `tel` char(14) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
 
 -- --------------------------------------------------------
 
@@ -129,6 +133,7 @@ CREATE TABLE `Loja` (
   `cnpj` char(18) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
 -- --------------------------------------------------------
 
 --
@@ -144,6 +149,7 @@ CREATE TABLE `Produto` (
   `controlado` tinyint(1) NOT NULL,
   `qtdemin` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 -- --------------------------------------------------------
 
@@ -179,6 +185,7 @@ CREATE TABLE `Transportadora` (
   `contato` varchar(255) NOT NULL,
   `tel` char(14) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 --
 -- Índices para tabelas despejadas
@@ -265,13 +272,13 @@ ALTER TABLE `Transportadora`
 -- AUTO_INCREMENT de tabela `Categoria`
 --
 ALTER TABLE `Categoria`
-  MODIFY `codcategoria` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `codcategoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `Cidade`
 --
 ALTER TABLE `Cidade`
-  MODIFY `codcidade` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `codcidade` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `Entrada`
@@ -283,7 +290,7 @@ ALTER TABLE `Entrada`
 -- AUTO_INCREMENT de tabela `Fornecedor`
 --
 ALTER TABLE `Fornecedor`
-  MODIFY `codfornecedor` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `codfornecedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `ItemEntrada`
@@ -301,7 +308,13 @@ ALTER TABLE `ItemSaida`
 -- AUTO_INCREMENT de tabela `Loja`
 --
 ALTER TABLE `Loja`
-  MODIFY `codloja` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `codloja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de tabela `Produto`
+--
+ALTER TABLE `Produto`
+  MODIFY `codproduto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `Saida`
@@ -313,7 +326,7 @@ ALTER TABLE `Saida`
 -- AUTO_INCREMENT de tabela `Transportadora`
 --
 ALTER TABLE `Transportadora`
-  MODIFY `codtransportadora` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `codtransportadora` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restrições para despejos de tabelas
