@@ -1,20 +1,6 @@
 <?php
 	
 	$acao = isset($_GET['acao']) ? $_GET['acao'] : null;
-	$tabela = isset($_POST['local']) ? $_POST['local'] : null;
-
-	$tabelas= [
-		'Yuk74T' => 'Categoria',
-		'KgzNSc' => 'Cidade',
-		'5ZydJi' => 'Entrada',
-		'X5MPuu' => 'Fornecedor',
-		'2EleIl' => 'ItemEntrada',
-		'IhXxGp' => 'ItemSaida',
-		'1FbrJT' => 'Loja',
-		'PPxZsw' => 'Produto',
-		'OyOSyK' => 'Saida',
-		'GzfMoF' => 'Transportadora'
-	];
 
 	if($acao == 'cadastrar'){
 		require_once('../models/Conection.model.php');
@@ -34,10 +20,9 @@
 				$ar[] = addslashes( $value);
 		}
 
-		foreach($tabelas as $key => $value){
-			if($tabela == $key)
-				$manager->create($value, $ar);
-		}
+		$manager->create('Fornecedor', $ar);
+		header("Location: ../provider.php"); 
+		
 		
 	}else if($acao == 'ler'){
 		require_once('../models/Conection.model.php');
@@ -45,16 +30,15 @@
 
 		$connect = new Connect;
 		$manager =  new Manager($connect);
-		$result = $manager->read();
+		$result = $manager->read('Fornecedor');
 		
-		echo "<pre>";
-		print_r($result);
-		echo "</pre>";
-
+		header("Location: ../settings.php"); 
 
 	}else if($acao == 'atualizar'){
+		header("Location: ../settings.php"); 
 
 	}else if($acao == 'deletar'){
+		header("Location: ../settings.php"); 
 
 	}
 

@@ -1,5 +1,4 @@
 <?php 
-
 	require_once('models/Conection.model.php');
 	require_once('models/Manager.model.php');
 
@@ -8,7 +7,7 @@
 
 	$connect = new Connect;
 	$manager =  new Manager($connect);
-	$result = $manager->read('Cidade');;
+	$result = $manager->read('Cidade');
 	
 	$return = json_encode($result);
 
@@ -20,13 +19,11 @@
 <DOCTYPE html>
 <html lang="pt-br">
 <head>
-	<title>Fornecedores</title>
+	<title>Transportadora</title>
 	<link rel="stylesheet" type="text/css" href="Bootstrap/bootstrap.min.css">
 </head>
 <body class="container-xl">
 	
-
-
 	<ul class="nav justify-content-end">
 	  <li class="nav-item">
 	    <a class="nav-link active" aria-current="page" href="products.php">Produtos</a>
@@ -46,19 +43,17 @@
 	  </li> -->
 	</ul>
 
-
-
-	<form style="max-width: 500px;" method="post" action="controllers/Provider.controller.php?acao=cadastrar">
+	<form  style="max-width: 500px;" method="post" action="controllers/ShippingCompany.controller.php?acao=cadastrar">
 
 		<div class="form-outline">
 			<select class="form-select select-city" name="Cidade_codcidade">
-			<option value="">Selecione uma cidade</option>
+				<option value="">Selecione uma cidade</option>
 			</select>
 		</div>
 
 		<div class="form-group">
 		  <label for="usr">Nome:</label>
-		  <input type="text" class="form-control" id="usr" name="fornecedor" >
+		  <input type="text" class="form-control" id="usr" name="transportadora" >
 		</div>
 
 		<div class="form-group">
@@ -67,7 +62,7 @@
 		</div>
 
 		<div class="form-group">
-		  <label for="usr">Num:</label>
+		  <label for="usr">Número:</label>
 		  <input type="text" class="form-control" id="usr" name="num" >
 		</div>
 
@@ -82,11 +77,6 @@
 		</div>
 
 		<div class="form-group">
-		  <label for="usr">Contato:</label>
-		  <input type="text" class="form-control" id="usr" name="contato" >
-		</div>
-
-		<div class="form-group">
 		  <label for="usr">CNPJ:</label>
 		  <input type="text" class="form-control" id="usr" name="cnpj" >
 		</div>
@@ -97,21 +87,29 @@
 		</div>
 
 		<div class="form-group">
+		  <label for="usr">Contato:</label>
+		  <input type="text" class="form-control" id="usr" name="contato" >
+		</div>
+
+
+		<div class="form-group">
 		  <label for="usr">Telefone:</label>
 		  <input type="text" class="form-control" id="usr" name="tel" >
-		 </div> 
-		
+		</div>
+
+
 		<div class="col-auto">
 		    <button type="submit" class="btn btn-primary mb-3">Cadastrar</button>
 		</div>
+
 	</form>
 
 
 	<?php 
-		$resultProvider = $manager->read('Fornecedor');
+		$resultShippingCompany = $manager->read('Transportadora');
 
 		// echo "<pre>";
-		// print_r($resultProvider);
+		// print_r($resultShippingCompany);
 		// echo "</pre>";
 
 
@@ -119,29 +117,31 @@
 			$table .= "<thead>";
 				$table .= "<tr>";
 					$table .= "<th>Id</th>";
-					$table .= "<th>Fornecedor</th>";
+					$table .= "<th>Nome</th>";
 					$table .= "<th>Cidade</th>";
-					$table .= "<th>CNPJ</th>";
-					$table .= "<th>Endreço</th>";
-					$table .= "<th>Bairro</th>";
+					$table .= "<th>Cnpj</th>";
+					$table .= "<th>Endereço</th>";
 					$table .= "<th>Cep</th>";
+					$table .= "<th>Bairro</th>";
+					$table .= "<th>Telefone</th>";
 				$table .= "</tr>";
 			$table .= "</thead>";
 			$table .= "<tbody>";
 				
-				foreach ($resultProvider as $key => $value) {
+				foreach ($resultShippingCompany  as $key => $value) {
 					$table .= "<tr>";
-					$table .= "<td>". $value['codfornecedor'] ."</td>";
-					$table .= "<td>". $value['fornecedor'] ."</td>";
+					$table .= "<td>". $value['codtransportadora'] ."</td>";
+					$table .= "<td>". $value['transportadora'] ."</td>";
 
 					$query_extra = " WHERE codcidade = ". $value['Cidade_codcidade'];
 					$resultCity= $manager->read('Cidade', $query_extra);
 					$table .= "<td>". $resultCity[0]['cidade']."</td>";
-					
+
 					$table .= "<td>". $value['cnpj'] ."</td>";
 					$table .= "<td>". $value['endereco'] ."</td>";
-					$table .= "<td>". $value['bairro'] ."</td>";
 					$table .= "<td>". $value['cep'] ."</td>";
+					$table .= "<td>". $value['bairro'] ."</td>";
+					$table .= "<td>". $value['tel'] ."</td>";
 
 					//echo $query_extra;
 					$table .= "</tr>";
@@ -155,8 +155,6 @@
 
 
 
-
-
 <!-- convertendo json para objeto javascript-->
 	<script>
 		var txt = '<?php print($return); ?> '; // insere o retorno do banco de dados na variável 
@@ -165,7 +163,7 @@
 
 		// localiza a tebela
 		var select = document.querySelector('.select-city');
-
+		
 		//insere a linha com o código e o nome do curso na tabela
 		data.forEach( (el)=>{
 			var option = document.createElement("option");
@@ -176,8 +174,7 @@
 
 			select.appendChild(option);
 		});
-	
+		
 	</script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
